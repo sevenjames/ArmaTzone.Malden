@@ -91,7 +91,12 @@ for "_i" from 1 to _vehicleCount do {
     
     // option - crewed
     if (_crewed) then {
+		
+		// create vehicle crew
         _vcrew = createVehicleCrew _vehicle;
+		
+		// make the crew bad at shooting (bad aim = more heli practice)
+		{_x setSkill ["aimingSpeed", 0.05];} forEach units _vcrew;
         
         // option - tasked
         if (_tasked) then {
@@ -99,9 +104,6 @@ for "_i" from 1 to _vehicleCount do {
             // pick a road destination within 1km
             _wpRoadSegments = _roadSeg nearRoads 1000;
             _p0 = selectRandom _wpRoadSegments;
-            if (_marked) then {
-                _pmk = ["mil_dot_noshadow", format ["%1",_i], _p0] call BIS_fnc_markerCreate;
-            };
             
             // add waypoint at origin
             _wp0 = _vcrew addWaypoint [_roadSeg,0];
