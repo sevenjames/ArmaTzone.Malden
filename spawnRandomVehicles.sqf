@@ -8,7 +8,7 @@ Create a new mission in the Arma Editor and save it.
 Copy this script into the mission folder.
 Add a marker area object and configure it to cover area of desired vehicle spawns.
 Add a game logic object with this init line:
-    _handle = [count, side, marker, density, civs, crewed, marked] execVM "spawnRandomVehicles.sqf";
+    _handle = [count, side, marker, density, civs, crewed, tasked, marked] execVM "spawnRandomVehicles.sqf";
 Where:
     count (int) = number of vehicles to spawn
     side (str) = faction of vehicles, either "blue" or "red"
@@ -16,6 +16,7 @@ Where:
     density (int) = minimun distance between vehicles in meters
     civs (bool) = include some civilian vehicles
     crewed (bool) = add crew to each vehicle
+    tasked (bool) = add a random move waypoint and drive back and forth 
     marked (bool)] = add map marks for each vehicle
 Example:
     _rz = [40,"red","redzone",20,true,true,false] execVM "spawnRandomVehicles.sqf";
@@ -31,6 +32,7 @@ params [
     "_density",
     "_includeCivs",
     "_crewed",
+    "_tasked",
     "_marked"
 ];
 
@@ -82,8 +84,36 @@ for "_i" from 1 to _vehicleCount do {
     _vehicle = _newType createVehicle getPosATL(_roadSeg);
     _vehicle setDir _vDirection;
     
-    // options
-    if (_crewed) then {_vcrew = createVehicleCrew _vehicle;};
-    if (_marked) then {_vmarker = ["mil_dot", _roadSeg] call BIS_fnc_markerCreate;};
+    // option - marked
+    if (_marked) then {
+        _vmarker = ["loc_Truck", format ["%1",_i], _roadSeg] call BIS_fnc_markerCreate;
+    };
     
+    // option - crewed
+    if (_crewed) then {
+        _vcrew = createVehicleCrew _vehicle;
+        
+        // option - tasked
+        if (_tasked) then {
+        
+            // pick a road destination within 1km
+            _wpRoadSegments = _roadSeg nearRoads 1000;
+            _p0 = selectRandom _wpRoadSegments;
+            if (_marked) then {
+                _pmk = ["mil_dot_noshadow", format ["%1",_i], _p0] call BIS_fnc_markerCreate;
+            };
+            
+            // add waypoint at origin
+            _wp0 = _vcrew addWaypoint [_roadSeg,0];
+            _wp0 setWaypointType "MOVE";
+            
+            // add waypoint at destination
+            _wp1 = _vcrew addWaypoint [_p0,0];
+            _wp1 setWaypointType "MOVE";
+            
+            // add cycle waypoint to force loop
+            _wp2 = _vcrew addWaypoint [_p0 getPos [50,0],0];
+            _wp2 setWaypointType "CYCLE";
+        };
+    };    
 };
