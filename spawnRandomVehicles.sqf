@@ -1,0 +1,89 @@
+/*
+
+This script spawns random vehicles on roads in a specified area.
+Originally for helicopter practice: target id, engagement, and evasion.
+
+Usage:
+Create a new mission in the Arma Editor and save it.
+Copy this script into the mission folder.
+Add a marker area object and configure it to cover area of desired vehicle spawns.
+Add a game logic object with this init line:
+    _handle = [count, side, marker, density, civs, crewed, marked] execVM "spawnRandomVehicles.sqf";
+Where:
+    count (int) = number of vehicles to spawn
+    side (str) = faction of vehicles, either "blue" or "red"
+    marker (str) = variable name of the marker area
+    density (int) = minimun distance between vehicles in meters
+    civs (bool) = include some civilian vehicles
+    crewed (bool) = add crew to each vehicle
+    marked (bool)] = add map marks for each vehicle
+Example:
+    _rz = [40,"red","redzone",20,true,true,false] execVM "spawnRandomVehicles.sqf";
+
+*/
+
+if (!isServer) exitWith {}; // exit if not server
+
+params [
+    "_vehicleCount",
+    "_side",
+    "_markerName",
+    "_density",
+    "_includeCivs",
+    "_crewed",
+    "_marked"
+];
+
+// base vehicle lists
+_milBlue = ["B_G_Van_01_fuel_F","B_Truck_01_fuel_F","B_Truck_01_transport_F"]; // unarmed
+_milBlue append ["B_G_Offroad_01_armed_F","B_LSV_01_armed_F","B_MRAP_01_hmg_F"]; // armed
+_milRed = ["O_Truck_02_fuel_F","O_Truck_03_fuel_F","O_Truck_03_transport_F","O_Truck_02_transport_F"]; // unarmed
+_milRed append ["O_G_Offroad_01_armed_F","O_MRAP_02_hmg_F","O_LSV_02_armed_F"]; //armed
+_civCiv = ["C_Hatchback_01_F","C_Offroad_01_F","C_Offroad_02_unarmed_F","C_Van_01_box_F","C_Truck_02_transport_F","C_Tractor_01_F"];
+
+// build array of available vehicles
+_vehicles = [];
+if (_side == "blue") then {_vehicles append _milBlue;};
+if (_side == "red") then {_vehicles append _milRed;};
+if (_includeCivs) then {_vehicles append _civCiv};
+
+// collect road segments within marker area
+_markerPos = getMarkerPos _markerName;
+_markerSize = getMarkerSize _markerName select 0;
+_roadSegments = _markerPos nearRoads _markerSize;
+
+// spawn vehicles
+for "_i" from 1 to _vehicleCount do {
+    scopeName "spawner";
+    
+    // select a random road segment that is clear
+    _roadSeg = selectRandom _roadSegments;
+    _tries = 1;
+    while {count (nearestObjects [_roadSeg, ["Car","Truck","APC","Tank"], _density]) > 0} do {
+        _roadSeg = selectRandom _roadSegments;
+        _tries = _tries + 1;
+        if (_tries > 20) then {
+            hint format ["Spawned %1 out of %2 requested vehicles.",_i,_vehicleCount];
+            breakOut "spawner";
+        };
+    };
+    
+    // use an adjacent road segment to align the vehicle to the road
+    _connectedSegs = roadsConnectedTo _roadSeg;
+    _vDirection = random(359);
+    if (count _connectedSegs > 0) then {
+        _vDirection = _roadSeg getDir (_connectedSegs select 0);
+    };
+    
+    // select a random vehicle type
+    _newType = selectRandom _vehicles;
+    
+    // spawn and rotate the new vehicle
+    _vehicle = _newType createVehicle getPosATL(_roadSeg);
+    _vehicle setDir _vDirection;
+    
+    // options
+    if (_crewed) then {_vcrew = createVehicleCrew _vehicle;};
+    if (_marked) then {_vmarker = ["mil_dot", _roadSeg] call BIS_fnc_markerCreate;};
+    
+};
