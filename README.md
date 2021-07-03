@@ -1,5 +1,3 @@
-
-
 * Context:<br>
 [ARMA3](https://store.steampowered.com/app/107410/Arma_3/)
 
