@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=16;
+		nextID=22;
 	};
 	class MarkerIDProvider
 	{
@@ -20,9 +20,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={9759.7734,267.90488,6390.1108};
+		pos[]={6069.7437,493.36612,2724.031};
 		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710671,0.70710683};
+		up[]={0,0.70710677,0.70710677};
+		aside[]={0.99999994,0,-0};
 	};
 };
 binarizationWanted=0;
@@ -114,7 +115,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=5;
+		items=10;
 		class Item0
 		{
 			dataType="Layer";
@@ -219,18 +220,18 @@ class Mission
 					dataType="Logic";
 					class PositionInfo
 					{
-						position[]={8048.3979,314.88715,1850.2502};
+						position[]={7709.9585,340.77682,2290.8386};
 						angles[]={0,5.0636721,0};
 					};
 					name="zeus_entity";
 					isPlayable=1;
 					id=1;
 					type="VirtualCurator_F";
-					atlOffset=18.847137;
+					atlOffset=18.84729;
 				};
 			};
 			id=2;
-			atlOffset=257.12061;
+			atlOffset=197.94048;
 		};
 		class Item1
 		{
@@ -340,7 +341,7 @@ class Mission
 				{
 					dataType="Waypoint";
 					loiterAltitude=-3.4028235e+038;
-					position[]={3720.7305,678.44818,2720.7061};
+					position[]={4567.335,349.35028,878.48584};
 					type="SeekAndDestroy";
 					expCond="call{false}";
 					class Effects
@@ -418,17 +419,17 @@ class Mission
 		class Item3
 		{
 			dataType="Marker";
-			position[]={3014.793,382.53799,3008.394};
+			position[]={4412.7734,363.78854,826.73657};
 			name="bzone";
 			markerType="ELLIPSE";
 			type="ellipse";
 			colorName="ColorEAST";
-			alpha=0.50000018;
+			alpha=0.75005651;
 			fillName="FDiagonal";
-			a=3000;
-			b=3000;
+			a=808;
+			b=808;
 			id=7;
-			atlOffset=-0.00012207031;
+			atlOffset=17.588531;
 		};
 		class Item4
 		{
@@ -442,6 +443,104 @@ class Mission
 			id=8;
 			type="Logic";
 			atlOffset=-3.0517578e-005;
+		};
+		class Item5
+		{
+			dataType="Trigger";
+			position[]={4397.125,346.43701,835.75403};
+			class Attributes
+			{
+				name="opfor_eliminated";
+				condition="call{this}";
+				onActivation="call{hint ""All OPFOR eliminated in the target zone. Return to base.""}";
+				sizeA=1616;
+				sizeB=1616;
+				timeout[]={10,10,10};
+				interuptable=1;
+				activationType="NOT PRESENT";
+				activationBy="EAST";
+			};
+			id=16;
+			type="EmptyDetector";
+			atlOffset=0.23699951;
+		};
+		class Item6
+		{
+			dataType="Trigger";
+			position[]={4401.438,346.20001,831.44202};
+			class Attributes
+			{
+				name="flight_in_zone";
+				condition="call{this}";
+				onActivation="call{hint ""Flight has entered the target zone.""}";
+				onDeactivation="call{hint ""Flight has exited the target zone.""}";
+				sizeA=1616;
+				sizeB=1616;
+				timeout[]={2,2,2};
+				interuptable=1;
+				repeatable=1;
+				activationBy="ANYPLAYER";
+			};
+			id=17;
+			type="EmptyDetector";
+		};
+		class Item7
+		{
+			dataType="Trigger";
+			position[]={8001.8374,296.04001,1888.4834};
+			angle=2.6235545;
+			class Attributes
+			{
+				name="flight_in_base";
+				condition="call{this}";
+				onActivation="call{hint ""Flight hase entered base.""}";
+				onDeactivation="call{hint ""Flight has left base.""}";
+				sizeA=450;
+				sizeB=150;
+				timeout[]={2,2,2};
+				interuptable=1;
+				repeatable=1;
+				activationBy="ANYPLAYER";
+				isRectangle=1;
+			};
+			id=19;
+			type="EmptyDetector";
+		};
+		class Item8
+		{
+			dataType="Trigger";
+			position[]={8272.79,452.51627,1178.275};
+			class Attributes
+			{
+				name="mission_complete";
+				condition="call{(triggerActivated opfor_eliminated) AND (triggerActivated flight_in_base) AND (triggerActivated is_landed)}";
+				onActivation="call{hint ""Mission Complete.""}";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={5,5,5};
+			};
+			id=20;
+			type="EmptyDetector";
+			atlOffset=-3.0517578e-005;
+		};
+		class Item9
+		{
+			dataType="Trigger";
+			position[]={7779.4058,386.95819,1178.275};
+			class Attributes
+			{
+				name="is_landed";
+				condition="call{(istouchingground vehicle player) AND (speed vehicle player < 0.5)}";
+				onActivation="call{hint ""Player vehicle is landed.""}";
+				onDeactivation="call{hint ""Player vehicle is airborne.""}";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={5,5,5};
+				interuptable=1;
+				repeatable=1;
+			};
+			id=21;
+			type="EmptyDetector";
 		};
 	};
 };
