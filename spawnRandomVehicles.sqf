@@ -91,12 +91,12 @@ for "_i" from 1 to _vehicleCount do {
     
     // option - crewed
     if (_crewed) then {
-		
-		// create vehicle crew
+        
+        // create vehicle crew
         _vcrew = createVehicleCrew _vehicle;
-		
-		// make the crew bad at shooting (bad aim = more heli practice)
-		{_x setSkill ["aimingSpeed", 0.05];} forEach units _vcrew;
+        
+        // make the crew bad at shooting (bad aim = more heli practice)
+        {_x setSkill ["aimingSpeed", 0.05];} forEach units _vcrew;
         
         // option - tasked
         if (_tasked) then {
