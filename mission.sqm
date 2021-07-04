@@ -8,26 +8,25 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=12;
+		nextID=16;
 	};
 	class MarkerIDProvider
 	{
-		nextID=3;
+		nextID=5;
 	};
 	class LayerIndexProvider
 	{
-		nextID=2;
+		nextID=3;
 	};
 	class Camera
 	{
 		pos[]={9759.7734,267.90488,6390.1108};
-		dir[]={-1.2363449e-007,-0.70710683,0.70710683};
-		up[]={-1.2363449e-007,0.70710671,0.70710683};
-		aside[]={1,0,1.7484557e-007};
+		dir[]={0,-0.70710683,0.70710683};
+		up[]={0,0.70710671,0.70710683};
 	};
 };
 binarizationWanted=0;
-sourceName="VicPatrolDev";
+sourceName="PatrolDev";
 addons[]=
 {
 	"A3_Modules_F_Curator_Curator",
@@ -115,7 +114,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=6;
+		items=5;
 		class Item0
 		{
 			dataType="Layer";
@@ -128,8 +127,8 @@ class Mission
 					dataType="Logic";
 					class PositionInfo
 					{
-						position[]={7490.1787,411.17896,6553.7734};
-						angles[]={0.068690397,0,0.18041906};
+						position[]={373.7652,527.54449,9579.7754};
+						angles[]={5.8862386,0,5.8356657};
 					};
 					name="zeus_module";
 					id=0;
@@ -220,18 +219,18 @@ class Mission
 					dataType="Logic";
 					class PositionInfo
 					{
-						position[]={8007.27,636.633,6186.6201};
+						position[]={8048.3979,314.88715,1850.2502};
 						angles[]={0,5.0636721,0};
 					};
 					name="zeus_entity";
 					isPlayable=1;
 					id=1;
 					type="VirtualCurator_F";
-					atlOffset=18.847046;
+					atlOffset=18.847137;
 				};
 			};
 			id=2;
-			atlOffset=50.589935;
+			atlOffset=257.12061;
 		};
 		class Item1
 		{
@@ -341,7 +340,7 @@ class Mission
 				{
 					dataType="Waypoint";
 					loiterAltitude=-3.4028235e+038;
-					position[]={4100.397,314.83484,4001.2061};
+					position[]={3720.7305,678.44818,2720.7061};
 					type="SeekAndDestroy";
 					expCond="call{false}";
 					class Effects
@@ -419,39 +418,30 @@ class Mission
 		class Item3
 		{
 			dataType="Marker";
-			position[]={4109.9639,301.42801,4050.741};
+			position[]={3014.793,382.53799,3008.394};
 			name="bzone";
 			markerType="ELLIPSE";
 			type="ellipse";
 			colorName="ColorEAST";
 			alpha=0.50000018;
-			fillName="DiagGrid";
-			a=4000;
-			b=4000;
+			fillName="FDiagonal";
+			a=3000;
+			b=3000;
 			id=7;
-			atlOffset=3.0517578e-005;
+			atlOffset=-0.00012207031;
 		};
 		class Item4
 		{
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={4889.6108,351.83661,4128};
+				position[]={390.17899,409.73688,8812.3311};
+				angles[]={6.2320294,0,5.9277492};
 			};
-			init="call{_bz = [30, ""red"", ""bzone"", 5, false, true, true, true] execVM ""spawnRandomVehicles.sqf"";}";
+			init="call{_bz = [""red"", ""bzone"", 20, false, true, true, true] execVM ""spawnRandomVehicles.sqf"";}";
 			id=8;
 			type="Logic";
-		};
-		class Item5
-		{
-			dataType="Marker";
-			position[]={3381.0969,353.46024,3318.5369};
-			name="marker_2";
-			markerType="RECTANGLE";
-			type="rectangle";
-			a=3200;
-			b=3200;
-			id=11;
+			atlOffset=-3.0517578e-005;
 		};
 	};
 };
