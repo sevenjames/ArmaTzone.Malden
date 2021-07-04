@@ -72,7 +72,7 @@ for "_i" from 1 to _vehicleCount do {
     
     // use an adjacent road segment to align the vehicle to the road
     _connectedSegs = roadsConnectedTo _roadSeg;
-    _vDirection = random(359);
+    _vDirection = random(360);
     if (count _connectedSegs > 0) then {
         _vDirection = _roadSeg getDir (_connectedSegs select 0);
     };
