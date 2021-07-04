@@ -8,9 +8,8 @@ Create a new mission in the Arma Editor and save it.
 Copy this script into the mission folder.
 Add a marker area object and configure it to cover area of desired vehicle spawns.
 Add a game logic object with this init line:
-    _handle = [count, side, marker, density, civs, crewed, tasked, marked] execVM "spawnRandomVehicles.sqf";
+    _handle = [side, marker, density, civs, crewed, tasked, marked] execVM "spawnRandomVehicles.sqf";
 Where:
-    count (int) = number of vehicles to spawn
     side (str) = faction of vehicles, either "blue" or "red"
     marker (str) = variable name of the marker area
     density (int) = minimun distance between vehicles in meters
@@ -26,7 +25,6 @@ Example:
 if (!isServer) exitWith {}; // exit if not server
 
 params [
-    "_vehicleCount",
     "_side",
     "_markerName",
     "_density",
@@ -53,6 +51,9 @@ if (_includeCivs) then {_vehicles append _civCiv};
 _markerPos = getMarkerPos _markerName;
 _markerSize = getMarkerSize _markerName select 0;
 _roadSegments = _markerPos nearRoads _markerSize;
+
+// calculate vehicle count based on zone size, approx 1 per 2 sq km
+_vehicleCount = ceil (((_markerSize*2/1000)^2)/2);
 
 // spawn vehicles
 for "_i" from 1 to _vehicleCount do {
