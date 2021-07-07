@@ -21,8 +21,9 @@ class EditorData
 	class Camera
 	{
 		pos[]={6069.7437,493.36612,2724.031};
-		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710671,0.70710683};
+		dir[]={-1.2363449e-007,-0.70710683,0.70710683};
+		up[]={-1.2363449e-007,0.70710671,0.70710683};
+		aside[]={1,0,1.7484557e-007};
 	};
 };
 binarizationWanted=0;
@@ -302,17 +303,17 @@ class Mission
 		class Item2
 		{
 			dataType="Marker";
-			position[]={4412.7734,363.78854,826.73657};
+			position[]={4412.7729,363.789,826.737};
 			name="bzone";
 			markerType="ELLIPSE";
 			type="ellipse";
 			colorName="ColorEAST";
 			alpha=0.75005651;
 			fillName="FDiagonal";
-			a=808;
-			b=808;
+			a=1200;
+			b=1200;
 			id=7;
-			atlOffset=17.588531;
+			atlOffset=17.588989;
 		};
 		class Item3
 		{
@@ -337,8 +338,8 @@ class Mission
 				name="opfor_eliminated";
 				condition="call{this}";
 				onActivation="call{hint ""All targets eliminated. Return to base.""}";
-				sizeA=1616;
-				sizeB=1616;
+				sizeA=2200;
+				sizeB=2200;
 				timeout[]={10,10,10};
 				interuptable=1;
 				activationType="NOT PRESENT";
