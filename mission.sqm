@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=22;
+		nextID=24;
 	};
 	class MarkerIDProvider
 	{
@@ -16,14 +16,13 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=3;
+		nextID=4;
 	};
 	class Camera
 	{
 		pos[]={6069.7437,493.36612,2724.031};
 		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,-0};
+		up[]={0,0.70710671,0.70710683};
 	};
 };
 binarizationWanted=0;
@@ -90,6 +89,7 @@ randomSeed=14259078;
 class ScenarioData
 {
 	author="JAMESON";
+	saving=0;
 };
 class Mission
 {
@@ -115,7 +115,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=10;
+		items=12;
 		class Item0
 		{
 			dataType="Layer";
@@ -128,8 +128,8 @@ class Mission
 					dataType="Logic";
 					class PositionInfo
 					{
-						position[]={373.7652,527.54449,9579.7754};
-						angles[]={5.8862386,0,5.8356657};
+						position[]={9747.9121,274.3927,246.83456};
+						angles[]={6.1543045,0,0.079829417};
 					};
 					name="zeus_module";
 					id=0;
@@ -231,7 +231,7 @@ class Mission
 				};
 			};
 			id=2;
-			atlOffset=197.94048;
+			atlOffset=-130.82904;
 		};
 		class Item1
 		{
@@ -341,9 +341,9 @@ class Mission
 				{
 					dataType="Waypoint";
 					loiterAltitude=-3.4028235e+038;
-					position[]={4567.335,349.35028,878.48584};
+					position[]={4567.335,349.35031,878.48602};
 					type="SeekAndDestroy";
-					expCond="call{false}";
+					expCond="call{(triggerActivated opfor_eliminated)}";
 					class Effects
 					{
 					};
@@ -436,13 +436,12 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={390.17899,409.73688,8812.3311};
-				angles[]={6.2320294,0,5.9277492};
+				position[]={9455.0234,349.58081,242.4408};
+				angles[]={5.7451243,0,0.0064037596};
 			};
 			init="call{_bz = [""red"", ""bzone"", 20, false, true, true, true] execVM ""spawnRandomVehicles.sqf"";}";
 			id=8;
 			type="Logic";
-			atlOffset=-3.0517578e-005;
 		};
 		class Item5
 		{
@@ -459,6 +458,7 @@ class Mission
 				interuptable=1;
 				activationType="NOT PRESENT";
 				activationBy="EAST";
+				effectSound="FD_Finish_F";
 			};
 			id=16;
 			type="EmptyDetector";
@@ -473,7 +473,6 @@ class Mission
 				name="flight_in_zone";
 				condition="call{this}";
 				onActivation="call{hint ""Flight has entered the target zone.""}";
-				onDeactivation="call{hint ""Flight has exited the target zone.""}";
 				sizeA=1616;
 				sizeB=1616;
 				timeout[]={2,2,2};
@@ -487,14 +486,13 @@ class Mission
 		class Item7
 		{
 			dataType="Trigger";
-			position[]={8001.8374,296.04001,1888.4834};
-			angle=2.6235545;
+			position[]={8001.8369,296.04001,1888.483};
+			angle=2.6235609;
 			class Attributes
 			{
 				name="flight_in_base";
 				condition="call{this}";
-				onActivation="call{hint ""Flight hase entered base.""}";
-				onDeactivation="call{hint ""Flight has left base.""}";
+				onDeactivation="call{hint ""Leaving friendly airspace.""; has_left_base = true;}";
 				sizeA=450;
 				sizeB=150;
 				timeout[]={2,2,2};
@@ -509,37 +507,71 @@ class Mission
 		class Item8
 		{
 			dataType="Trigger";
-			position[]={8272.79,452.51627,1178.275};
+			position[]={7752.0171,322.47665,1445.604};
 			class Attributes
 			{
 				name="mission_complete";
-				condition="call{(triggerActivated opfor_eliminated) AND (triggerActivated flight_in_base) AND (triggerActivated is_landed)}";
+				condition="call{(triggerActivated is_landed) AND (triggerActivated flight_in_base) AND (triggerActivated opfor_eliminated)}";
 				onActivation="call{hint ""Mission Complete.""}";
 				sizeA=0;
 				sizeB=0;
-				timeout[]={5,5,5};
+				timeout[]={3,3,3};
 			};
 			id=20;
 			type="EmptyDetector";
-			atlOffset=-3.0517578e-005;
 		};
 		class Item9
 		{
 			dataType="Trigger";
-			position[]={7779.4058,386.95819,1178.275};
+			position[]={7348.0742,295.70853,1443.006};
 			class Attributes
 			{
 				name="is_landed";
-				condition="call{(istouchingground vehicle player) AND (speed vehicle player < 0.5)}";
-				onActivation="call{hint ""Player vehicle is landed.""}";
-				onDeactivation="call{hint ""Player vehicle is airborne.""}";
+				condition="call{(istouchingground vehicle player) AND (speed vehicle player < 0.5) AND (has_left_base)}";
+				onActivation="call{hint ""Touchdown""}";
 				sizeA=0;
 				sizeB=0;
-				timeout[]={5,5,5};
+				timeout[]={2,2,2};
 				interuptable=1;
 				repeatable=1;
 			};
 			id=21;
+			type="EmptyDetector";
+		};
+		class Item10
+		{
+			dataType="Trigger";
+			position[]={7549.396,294.09119,1445.604};
+			class Attributes
+			{
+				name="refit_vehicle";
+				condition="call{(triggerActivated is_landed) AND (triggerActivated flight_in_base) AND !(triggerActivated opfor_eliminated)}";
+				onActivation="call{_veh = (vehicle player);  " \n "_veh setDamage 0;  " \n "_veh setFuel 1;  " \n "_veh setVehicleAmmo 1; " \n "hint ""Repaired, Refueled, and Rearmed."";}";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={3,3,3};
+				interuptable=1;
+				repeatable=1;
+				effectSound="FD_CP_Clear_F";
+			};
+			id=22;
+			type="EmptyDetector";
+			atlOffset=3.0517578e-005;
+		};
+		class Item11
+		{
+			dataType="Trigger";
+			position[]={7950.7412,332.84732,1448.202};
+			class Attributes
+			{
+				name="mission_end";
+				condition="call{triggerActivated mission_complete}";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={5,5,5};
+				type="END1";
+			};
+			id=23;
 			type="EmptyDetector";
 		};
 	};
