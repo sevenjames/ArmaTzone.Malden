@@ -19,7 +19,7 @@ class EditorData
 		pos[]={6685.9932,113.97954,10553.424};
 		dir[]={0,-0.70710683,0.70710683};
 		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,-0};
+		aside[]={0.99999994,0,0};
 	};
 };
 binarizationWanted=0;
@@ -187,7 +187,7 @@ class Mission
 		{
 			dataType="Marker";
 			position[]={8089.019,28.841999,10147.376};
-			name="zone_base";
+			name="marker_base";
 			text="Airbase";
 			markerType="RECTANGLE";
 			type="rectangle";
